@@ -15,16 +15,11 @@
 printA:
     
     li $t0, 0  # variable i in the for loop
-    move $t2, $a0  #$t4 will hold address since a0 is needed to print number and string
-    li $v0, 4
-    la $a0, string
-    syscall
+    move $t2, $a0  #$t2 will hold address since a0 is needed to print number and string
 
 printA_loop:
 
     bge $t0, $a1, printA_exit
-    sll $t1, $t0, 2
-    add $t2, $t2, $t1
     lw $t3, 0($t2)
 
     li $v0, 1
@@ -35,6 +30,7 @@ printA_loop:
     syscall
 
     addi $t0, $t0, 1
+    addiu $t2, $t2, 4
     j printA_loop
 
 printA_exit:
@@ -45,6 +41,11 @@ main:
 
     la $a0, array
 	la $a1, 10
+    move $t2, $a0
+    li $v0, 4
+    la $a0, string
+    syscall
+    move $a0, $t2
     jal printA
 
 exit:
